@@ -48,7 +48,11 @@ int main()
 
 	statisticsBST(tree,stdout);
 
+	bstNode *max = findBSTMax(tree->root);
 
+	fprintf(stdout,"\n\n");
+
+	tree->display(stdout,max->value);
 
 }
 

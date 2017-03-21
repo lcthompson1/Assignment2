@@ -118,7 +118,9 @@ bstNode *swapToLeafBSTNode(bstNode *node)
 
 void pruneBSTNode(bst *tree,bstNode *node)
 {
-
+//	if(node->left == NULL)
+//	else if(node->right == NULL)
+//
 }
 
 int sizeBST(bst *tree)
@@ -144,7 +146,7 @@ void inorder(bstNode *node, void (*d)(FILE *,void *))
 
 void displayBST(FILE *fp,bst *tree)
 {
-	inorder(tree->root,tree->display);
+//	inorder(tree->root,tree->display);
 }
 
 void checkBST(bst *tree)
@@ -181,4 +183,20 @@ int maxBST(bstNode *node)
                 else
                         return right + 1;
         }
+}
+
+bstNode *findBSTMax(bstNode *node)
+{
+	bstNode *cur = node;
+
+	while(cur->right != NULL)
+		cur = cur->right;
+
+	return cur;
+
+}
+
+bstNode *findBSTMin(bstNode *node)
+{
+
 }
