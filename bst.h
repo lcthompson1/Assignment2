@@ -35,5 +35,7 @@ extern int findBSTHelper(bstNode *node, void *val, int (*c)(void *,void *));
 extern bstNode *findBSTNodeHelper(bstNode *node, void *val, int (*c)(void *,void *));
 extern int minBST(bstNode *node);
 extern int maxBST(bstNode *node);
+extern bstNode *findBSTMin(bstNode *node);
+extern bstNode *findBSTMax(bstNode *node);
 
 #endif

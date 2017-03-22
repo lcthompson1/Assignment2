@@ -49,11 +49,21 @@ int main()
 	statisticsBST(tree,stdout);
 
 	bstNode *max = findBSTMax(tree->root);
+	bstNode *min = findBSTMin(tree->root);
 
 	fprintf(stdout,"\n\n");
 
 	tree->display(stdout,max->value);
+	fprintf(stdout,"\n\n");
+	tree->display(stdout,min->value);
 
+	tree->display(stdout,tree->root->right->parent->value);
+//	pruneBSTNode(tree,tree->root);
+	fprintf(stdout,"\n\n\n");
+
+	displayBST(stdout,tree);
+	
+	fprintf(stdout,"\n\n");
 }
 
 
