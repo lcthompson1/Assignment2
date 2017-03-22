@@ -41,7 +41,6 @@ int main()
         insertBST(tree,newInteger(60));
         insertBST(tree,newInteger(80));
 	insertBST(tree,newInteger(90));
-	insertBST(tree,newInteger(70));
 
 	displayBST(stdout,tree);
 
