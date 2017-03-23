@@ -61,11 +61,26 @@ bstNode *insertBSTNode(bstNode *node, void *val, int (*c)(void *,void *))
 {
 	if(node == NULL)
 		return newBSTNodePar(val,node);
-	if(c(val,node->value)<0)
-		node->left = insertBSTNode(node->left, val, c);
-	else if(c(val,node->value) > 0)
-		node->right = insertBSTNode(node->right, val, c);
-	return node;
+	else
+	{
+		bstNode *temp;
+
+		if(c(val,node->value) <= 0)
+		{
+
+		}
+		else
+		{
+
+		}
+	}
+
+
+//	if(c(val,node->value)<0)
+//		node->left = insertBSTNode(node->left, val, c);
+//	else if(c(val,node->value) > 0)
+//		node->right = insertBSTNode(node->right, val, c);
+//	return node;
 
 }
 
