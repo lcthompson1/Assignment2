@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include "bst.h"
 #include <stdio.h>
-#include "scanner.h"
 
 bst *newBST(void (*d)(FILE *,void *),int (*c)(void *,void *))
 {
@@ -135,19 +134,27 @@ bstNode *swapToLeafBSTNode(bstNode *node)
 
 void pruneBSTNode(bst *tree,bstNode *node)
 {
-	fprintf(stdout,"Running\n");
 	if(node->left == NULL && node->right == NULL)
 	{
-		fprintf(stdout,"Case 1\n");
+		fprintf(stdout,"\nPruning\n");
 		int comp = tree->compare(node->value,node->parent->value);
-		if(comp >= 0)
-			node->parent->right = NULL;
+		fprintf(stdout,"\nstrcmp = %d\n",comp);
 		if(comp < 0)
+		{
+			fprintf(stdout,"Case: prune is greater than parent\n");
+			node->parent->right = NULL;
+			node->parent = NULL;
+		}
+		if(comp >= 0)
+		{
+			fprintf(stdout,"Case: prune is less than or equal to parent\n");
 			node->parent->left = NULL;
+			node->parent = NULL;
+		}
 	}
 	else
 	{
-		fprintf(stdout,"Case 2\n");
+		fprintf(stdout,"\nSwapping\n");
 		pruneBSTNode(tree,swapToLeafBSTNode(node));
 	}
 }

@@ -19,32 +19,32 @@ int intComparator(void *a,void *b)
 	return i;
 
 }
-int realComparator(void *a,void *b)
+//int realComparator(void *a,void *b)
+//{
+//	float af = getReal(a);
+//	float bf = getReal(b);
+//
+//        int i = 0;
+//        if(af < bf)
+//                i = -1;
+//        else if(af > bf)
+//                i = 1;
+//        else if(af == bf)
+//                i = 0;
+//
+//        return i;
+//}
+int stringComparator(void *a,void *b)
 {
-	float af = getReal(a);
-	float bf = getReal(b);
+//	int i = 0;
+//	if((strcmp((char*)a,(char*)b)) < 0)
+//		i = -1;
+//	else if((strcmp((char*)a,(char*)b)) > 0)
+//		i = 1;
+//	else if((strcmp((char*)a,(char*)b)) == 0)
+//		i = 0;
 
-        int i = 0;
-        if(af < bf)
-                i = -1;
-        else if(af > bf)
-                i = 1;
-        else if(af == bf)
-                i = 0;
-
-        return i;
-}
-int stringComparator(char *a,char *b)
-{
-	int i = 0;
-	if((strcmp(a,b)) < 0)
-		i = -1;
-	else if((strcmp(a,b)) > 0)
-		i = 1;
-	else if((strcmp(a,b)) == 0)
-		i = 0;
-
-	return i;
+	return strcmp((char*)a,(char*)b);;
 }
 
 

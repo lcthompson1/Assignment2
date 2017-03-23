@@ -1,71 +1,53 @@
 #include "bst.h"
 #include <stdio.h>
-//#include "comparator.h"
+#include <string.h>
 #include "integer.h"
 #include "real.h"
+#include "comparator.c"
 
-int intComparator(void *a,void *b)
+
+void printString(FILE *fp,void *string)
 {
-        int ai = getInteger(a);
-        int bi = getInteger(b);
-
-        int i = 0;
-        if(ai < bi)
-                i = -1;
-        else if(ai > bi)
-                i = 1;
-        else if(ai == bi)
-                i = 0;
-
-        return i;
-
+	fprintf(fp,"%s",(char*)string);
 }
 
 int main()
 {
 	printf("Starting");
 
+	char *str1 = "c";
+	char *str2 = "b";
+	char *str3 = "d";
+	char *str4 = "e";
+	char *str5 = "a";
 
+	fprintf(stdout,"\nb cmp c: %d\n",strcmp(str2,str3));
 
+	bst *tree = newBST(printString,stringComparator);
 
-	bst *tree = newBST(displayInteger,intComparator);
+	insertBST(tree,str1);
+	insertBST(tree,str2);
+	insertBST(tree,str3);
+	insertBST(tree,str4);
+	insertBST(tree,str5);
 
-	insertBST(tree,newInteger(50));
-
-
-
-	insertBST(tree,newInteger(30));
-        insertBST(tree,newInteger(20));
-        insertBST(tree,newInteger(40));
-        insertBST(tree,newInteger(70));
-        insertBST(tree,newInteger(60));
-        insertBST(tree,newInteger(80));
-	insertBST(tree,newInteger(90));
-	insertBST(tree,newInteger(150));
 
 	displayBST(stdout,tree);
 
 
 	statisticsBST(tree,stdout);
 
-	bstNode *max = findBSTMax(tree->root);
-	bstNode *min = findBSTMin(tree->root);
 
-	fprintf(stdout,"\n\n");
 
-	tree->display(stdout,max->value);
-	fprintf(stdout,"\n\n");
-	tree->display(stdout,min->value);
 
-	tree->display(stdout,tree->root->right->parent->value);
-	pruneBSTNode(tree,tree->root);
 	pruneBSTNode(tree,tree->root->right);
-	fprintf(stdout,"\n\n\n");
+//	pruneBSTNode(tree,tree->root->right);
+//	fprintf(stdout,"\n\n\n");
 
-
+	fprintf(stdout,"\n");
 	displayBST(stdout,tree);
-	
-	fprintf(stdout,"\n\n");
+
+//	fprintf(stdout,"\n\n");
 }
 
 
