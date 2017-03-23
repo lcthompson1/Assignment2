@@ -58,8 +58,10 @@ int main()
 	tree->display(stdout,min->value);
 
 	tree->display(stdout,tree->root->right->parent->value);
-//	pruneBSTNode(tree,tree->root);
+	pruneBSTNode(tree,tree->root);
+	pruneBSTNode(tree,tree->root->right);
 	fprintf(stdout,"\n\n\n");
+
 
 	displayBST(stdout,tree);
 	

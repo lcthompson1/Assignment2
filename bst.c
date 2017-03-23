@@ -21,14 +21,15 @@ bst *newBST(void (*d)(FILE *,void *),int (*c)(void *,void *))
 
 bstNode *insertBST(bst *tree,void *val)
 {
-	bstNode *ret = newBSTNode(val);
+	bstNode *ret;
 	if(sizeBST(tree) == 0)
 	{
 		tree->root = newBSTNode(val);
+		ret = tree->root;
 	}
 	else
 	{
-		insertBSTNode(tree->root,val,tree->compare);
+		ret = insertBSTNode(tree->root,val,tree->compare);
 	}
 	tree->size += 1;
 	return ret;
@@ -45,43 +46,29 @@ bstNode *newBSTNode(void *val)
 	return tmp;
 }
 
-bstNode *newBSTNodePar(void *val, bstNode *par)
-{
-	bstNode *tmp = malloc(sizeof(bstNode));
-        tmp->left = NULL;
-        tmp->right = NULL;
-        tmp->parent = par;
-        tmp->value = val;
-
-        return tmp;
-
-}
 
 bstNode *insertBSTNode(bstNode *node, void *val, int (*c)(void *,void *))
 {
 	if(node == NULL)
-		return newBSTNodePar(val,node);
+		return newBSTNode(val);
 	else
 	{
 		bstNode *temp;
 
 		if(c(val,node->value) <= 0)
 		{
-
+			temp = insertBSTNode(node->left,val,c);
+			node->left = temp;
+			temp->parent = node;
 		}
 		else
 		{
-
+			temp = insertBSTNode(node->right,val,c);
+			node->right = temp;
+			temp->parent = node;
 		}
+		return node;
 	}
-
-
-//	if(c(val,node->value)<0)
-//		node->left = insertBSTNode(node->left, val, c);
-//	else if(c(val,node->value) > 0)
-//		node->right = insertBSTNode(node->right, val, c);
-//	return node;
-
 }
 
 int findBST(bst *tree,void *val)
@@ -175,25 +162,22 @@ void statisticsBST(bst *tree,FILE *fp)
 	fprintf(fp,"Minimum Depth: %d\nMaximum Depth: %d\n",minBST(tree->root),maxBST(tree->root));
 }
 
-void inorder(bstNode *node, void (*d)(FILE *,void *))
+void inorder(bstNode *node, void (*d)(FILE *,void *),FILE *fp)
 {
 	if(node != NULL)
 	{
-		inorder(node->left,d);
-		d(stdout,node->value);
-		fprintf(stdout,"	");
-		inorder(node->right,d);
+		inorder(node->left,d,fp);
+		d(fp,node->value);
+		fprintf(fp,"	");
+		inorder(node->right,d,fp);
 	}
 }
 
 void displayBST(FILE *fp,bst *tree)
 {
-	inorder(tree->root,tree->display);
+	inorder(tree->root,tree->display,fp);
 }
 
-void checkBST(bst *tree)
-{
-}
 
 int minBST(bstNode *node)
 {
