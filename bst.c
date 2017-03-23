@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include "bst.h"
 #include <stdio.h>
+#include "queue.h"
 
 bst *newBST(void (*d)(FILE *,void *),int (*c)(void *,void *))
 {
@@ -24,6 +25,7 @@ bstNode *insertBST(bst *tree,void *val)
 	if(sizeBST(tree) == 0)
 	{
 		tree->root = newBSTNode(val);
+		tree->root->parent = tree->root;
 		ret = tree->root;
 	}
 	else
@@ -169,20 +171,64 @@ void statisticsBST(bst *tree,FILE *fp)
 	fprintf(fp,"Minimum Depth: %d\nMaximum Depth: %d\n",minBST(tree->root),maxBST(tree->root));
 }
 
-void inorder(bstNode *node, void (*d)(FILE *,void *),FILE *fp)
+void levelOrder(bstNode *node, void (*d)(FILE *,void *),FILE *fp, int (*c)(void *,void *))
 {
-	if(node != NULL)
+	if(node == NULL)
 	{
-		inorder(node->left,d,fp);
-		d(fp,node->value);
-		fprintf(fp,"	");
-		inorder(node->right,d,fp);
+		fprintf(fp,"0: \n");
+		return;
+	}
+
+	queue *temp = newQueue(d);
+
+	enqueue(temp,node);
+	int level = 0;
+
+	while(1)
+	{
+
+		int count = sizeQueue(temp);
+		if(count == 0)
+			break;
+
+		fprintf(fp,"%d: ",level);
+
+		while(count > 0)
+		{
+			bstNode *newNode = dequeue(temp);
+
+			if(newNode->left == NULL && newNode->right == NULL)
+				fprintf(stdout,"=");
+
+			d(fp,newNode->value);
+			fprintf(fp,"(");
+			d(fp,newNode->parent->value);
+			fprintf(fp,")-");
+
+			if(newNode == newNode->parent)
+				fprintf(fp," ");
+			else if(c(newNode->value,newNode->parent->value) > 0)
+				fprintf(fp,"R ");
+			else if(c(newNode->value,newNode->parent->value) <= 0)
+				fprintf(fp,"L ");
+
+
+			fprintf(fp," ");
+			if(newNode->left != NULL)
+				enqueue(temp,newNode->left);
+			if(newNode->right != NULL)
+				enqueue(temp,newNode->right);
+
+			count --;
+		}
+		fprintf(fp,"\n");
+		level ++;
 	}
 }
 
 void displayBST(FILE *fp,bst *tree)
 {
-	inorder(tree->root,tree->display,fp);
+	levelOrder(tree->root,tree->display,fp,tree->compare);
 }
 
 

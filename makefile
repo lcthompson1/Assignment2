@@ -23,11 +23,17 @@ comparator.o: comparator.c comparator.h
 bst.o: bst.h bst.c
 	gcc -Wall -Wextra -g -c -std=c99 bst.c
 
+sll.o: sll.h sll.c
+	gcc -Wall -Wextra -g -c -std=c99 sll.c
+
+queue.o: queue.h queue.c
+	gcc -Wall -Wextra -g -c -std=c99 queue.c
+
 bstrees.o: bstrees.c
 	gcc -Wall -Wextra -g -c -std=c99 bstrees.c
 
-bstrees: bstrees.o bst.o integer.o scanner.o
-	gcc -Wall -Wextra -g -o bstrees -g bstrees.o bst.o integer.o scanner.o
+bstrees: bstrees.o bst.o integer.o scanner.o queue.o sll.o
+	gcc -Wall -Wextra -g -o bstrees -g bstrees.o bst.o integer.o scanner.o queue.o sll.o
 
 
 clean :
