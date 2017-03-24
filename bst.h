@@ -29,13 +29,5 @@ extern int sizeBST(bst *);
 extern void statisticsBST(bst *,FILE *);
 extern void displayBST(FILE *,bst *);
 extern void checkBST(bst *);                //optional
-extern bstNode *newBSTNode(void *val);
-extern bstNode *insertBSTNode(bstNode *node, void *val, int (*c)(void *,void *));
-extern int findBSTHelper(bstNode *node, void *val, int (*c)(void *,void *));
-extern bstNode *findBSTNodeHelper(bstNode *node, void *val, int (*c)(void *,void *));
-extern int minBST(bstNode *node);
-extern int maxBST(bstNode *node);
-extern bstNode *findBSTMin(bstNode *node);
-extern bstNode *findBSTMax(bstNode *node);
 
 #endif

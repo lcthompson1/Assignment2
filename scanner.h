@@ -15,4 +15,5 @@ extern char *readToken(FILE *);
 extern char *readLine(FILE *);
 extern void *allocate(size_t);
 extern void *reallocate(void *,size_t);
+extern int stringPending(FILE *fp);
 #endif

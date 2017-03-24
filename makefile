@@ -32,8 +32,14 @@ queue.o: queue.h queue.c
 bstrees.o: bstrees.c
 	gcc -Wall -Wextra -g -c -std=c99 bstrees.c
 
-bstrees: bstrees.o bst.o integer.o scanner.o queue.o sll.o
-	gcc -Wall -Wextra -g -o bstrees -g bstrees.o bst.o integer.o scanner.o queue.o sll.o
+rbt.o: rbt.h rbt.c
+	gcc -Wall -Wextra -g -c -std=c99 rbt.c
+
+vbst.o: vbst.h vbst.c
+	gcc -Wall -Wextra -g -c -std=c99 vbst.c
+
+bstrees: bstrees.o bst.o integer.o scanner.o queue.o sll.o rbt.o vbst.o
+	gcc -Wall -Wextra -g -o bstrees -g bstrees.o bst.o integer.o scanner.o queue.o sll.o rbt.o vbst.o
 
 
 clean :

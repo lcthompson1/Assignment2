@@ -19,9 +19,47 @@ bst *newBST(void (*d)(FILE *,void *),int (*c)(void *,void *))
 
 }
 
+bstNode *newBSTNode(void *val)
+{
+        bstNode *tmp = malloc(sizeof(bstNode));
+        tmp->left = NULL;
+        tmp->right = NULL;
+        tmp->parent = NULL;
+        tmp->value = val;
+
+        return tmp;
+}
+
+bstNode *insertBSTNode(bstNode *node, void *val, int (*c)(void *,void *),bstNode **address)
+{
+        if(node == NULL)
+	{
+                bstNode *temp = newBSTNode(val);
+                *address = temp;
+                return temp;
+	}
+        else
+        {
+
+                if(c(val,node->value) <= 0)
+                {
+                        node->left = insertBSTNode(node->left,val,c,address);
+                        node->left->parent = node;
+                }
+                else
+                {
+                        node->right = insertBSTNode(node->right,val,c,address);
+                        node->right->parent = node;
+                }
+                return node;
+        }
+}
+
+
 bstNode *insertBST(bst *tree,void *val)
 {
 	bstNode *ret;
+	bstNode *address = NULL;
 	if(sizeBST(tree) == 0)
 	{
 		tree->root = newBSTNode(val);
@@ -30,47 +68,46 @@ bstNode *insertBST(bst *tree,void *val)
 	}
 	else
 	{
-		ret = insertBSTNode(tree->root,val,tree->compare);
+		ret = insertBSTNode(tree->root,val,tree->compare,&address);
+		ret = address;
 	}
 	tree->size += 1;
 	return ret;
 }
 
-bstNode *newBSTNode(void *val)
+bstNode *findBSTMax(bstNode *node)
 {
-	bstNode *tmp = malloc(sizeof(bstNode));
-        tmp->left = NULL;
-        tmp->right = NULL;
-        tmp->parent = NULL;
-        tmp->value = val;
+        bstNode *cur = node;
 
-	return tmp;
+        while(cur->right != NULL)
+                cur = cur->right;
+
+        return cur;
+
+}
+
+bstNode *findBSTMin(bstNode *node)
+{
+        bstNode *cur = node;
+
+        while(cur->left != NULL)
+                cur = cur->left;
+
+        return cur;
 }
 
 
-bstNode *insertBSTNode(bstNode *node, void *val, int (*c)(void *,void *))
+int findBSTHelper(bstNode *node, void *val, int (*c)(void *,void *))
 {
-	if(node == NULL)
-		return newBSTNode(val);
-	else
-	{
-		bstNode *temp;
-
-		if(c(val,node->value) <= 0)
-		{
-			temp = insertBSTNode(node->left,val,c);
-			node->left = temp;
-			temp->parent = node;
-		}
-		else
-		{
-			temp = insertBSTNode(node->right,val,c);
-			node->right = temp;
-			temp->parent = node;
-		}
-		return node;
-	}
+        if(node == NULL)
+                return 0;
+        if(c(node->value,val) == 0)
+                return 1;
+        if(c(node->value,val) > 1)
+                return findBSTHelper(node->left,val,c);
+        return findBSTHelper(node->left,val,c);
 }
+
 
 int findBST(bst *tree,void *val)
 {
@@ -84,35 +121,27 @@ int findBST(bst *tree,void *val)
 	}
 }
 
-int findBSTHelper(bstNode *node, void *val, int (*c)(void *,void *))
+bstNode *findBSTNodeHelper(bstNode *node, void *val, int (*c)(void *,void *))
 {
-	if(node == NULL)
-		return 0;
-	if(c(node->value,val) == 0)
-		return 1;
-	if(c(node->value,val) > 1)
-		return findBSTHelper(node->left,val,c);
-	return findBSTHelper(node->left,val,c);
+        if(node == NULL)
+                return NULL;
+        else if(c(node->value,val) == 0)
+                return node;
+        else if(c(node->value,val) > 0)
+                return findBSTNodeHelper(node->left,val,c);
+	else if(c(node->value,val) < 0)
+		return findBSTNodeHelper(node->right,val,c);
+        return findBSTNodeHelper(node->right,val,c);
 }
 
 bstNode *findBSTNode(bst *tree,void *val)
 {
 	if(sizeBST(tree) == 0)
-		return 0;
+		return NULL;
 	else
 		return findBSTNodeHelper(tree->root,val,tree->compare);
 }
 
-bstNode *findBSTNodeHelper(bstNode *node, void *val, int (*c)(void *,void *))
-{
-        if(node == NULL)
-                return 0;
-        if(c(node->value,val) == 0)
-                return node;
-        if(c(node->value,val) > 1)
-                return findBSTNodeHelper(node->left,val,c);
-        return findBSTNodeHelper(node->left,val,c);
-}
 
 bstNode *swapToLeafBSTNode(bstNode *node)
 {
@@ -138,32 +167,70 @@ void pruneBSTNode(bst *tree,bstNode *node)
 {
 	if(node->left == NULL && node->right == NULL)
 	{
-		fprintf(stdout,"\nPruning\n");
 		int comp = tree->compare(node->value,node->parent->value);
-		fprintf(stdout,"\nstrcmp = %d\n",comp);
-		if(comp < 0)
+		if(node->parent->right == NULL && node->parent->left != NULL)
 		{
-			fprintf(stdout,"Case: prune is greater than parent\n");
+			node->parent->left = NULL;
+			node->parent = NULL;
+		}
+		else if(node->parent->left == NULL && node->parent->right != NULL)
+		{
 			node->parent->right = NULL;
 			node->parent = NULL;
 		}
-		if(comp >= 0)
+		else if(comp > 0)
 		{
-			fprintf(stdout,"Case: prune is less than or equal to parent\n");
+			node->parent->right = NULL;
+			node->parent = NULL;
+		}
+		else if(comp <= 0)
+		{
 			node->parent->left = NULL;
 			node->parent = NULL;
 		}
 	}
 	else
 	{
-		fprintf(stdout,"\nSwapping\n");
 		pruneBSTNode(tree,swapToLeafBSTNode(node));
 	}
+	tree->size --;
 }
 
 int sizeBST(bst *tree)
 {
 	return tree->size;
+}
+
+int minBST(bstNode *node)
+{
+        if(node == NULL)
+                return 0;
+        else
+        {
+                int left = minBST(node->left);
+                int right = minBST(node->right);
+
+                if(left < right)
+                        return left + 1;
+                else
+                        return right + 1;
+        }
+}
+
+int maxBST(bstNode *node)
+{
+        if(node == NULL)
+                return 0;
+        else
+        {
+                int left = maxBST(node->left);
+                int right = maxBST(node->right);
+
+                if(left > right)
+                        return left + 1;
+                else
+                        return right + 1;
+        }
 }
 
 void statisticsBST(bst *tree,FILE *fp)
@@ -191,29 +258,27 @@ void levelOrder(bstNode *node, void (*d)(FILE *,void *),FILE *fp, int (*c)(void 
 		if(count == 0)
 			break;
 
-		fprintf(fp,"%d: ",level);
+		fprintf(fp,"%d:",level);
 
 		while(count > 0)
 		{
 			bstNode *newNode = dequeue(temp);
-
+                        fprintf(stdout," ");
 			if(newNode->left == NULL && newNode->right == NULL)
 				fprintf(stdout,"=");
-
 			d(fp,newNode->value);
 			fprintf(fp,"(");
 			d(fp,newNode->parent->value);
 			fprintf(fp,")-");
 
 			if(newNode == newNode->parent)
-				fprintf(fp," ");
+				;
 			else if(c(newNode->value,newNode->parent->value) > 0)
-				fprintf(fp,"R ");
+				fprintf(fp,"r");
 			else if(c(newNode->value,newNode->parent->value) <= 0)
-				fprintf(fp,"L ");
+				fprintf(fp,"l");
 
 
-			fprintf(fp," ");
 			if(newNode->left != NULL)
 				enqueue(temp,newNode->left);
 			if(newNode->right != NULL)
@@ -232,55 +297,4 @@ void displayBST(FILE *fp,bst *tree)
 }
 
 
-int minBST(bstNode *node)
-{
-	if(node == NULL)
-		return 0;
-	else
-	{
-		int left = minBST(node->left);
-		int right = minBST(node->right);
 
-		if(left < right)
-			return left + 1;
-		else
-			return right + 1;
-	}
-}
-
-int maxBST(bstNode *node)
-{
-        if(node == NULL)
-        	return 0;
-        else
-        {
-                int left = maxBST(node->left);
-                int right = maxBST(node->right);
-
-                if(left > right)
-                        return left + 1;
-                else
-                        return right + 1;
-        }
-}
-
-bstNode *findBSTMax(bstNode *node)
-{
-	bstNode *cur = node;
-
-	while(cur->right != NULL)
-		cur = cur->right;
-
-	return cur;
-
-}
-
-bstNode *findBSTMin(bstNode *node)
-{
-	bstNode *cur = node;
-
-	while(cur->left != NULL)
-		cur = cur->left;
-
-	return cur;
-}
