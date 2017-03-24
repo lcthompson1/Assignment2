@@ -263,9 +263,9 @@ void levelOrder(bstNode *node, void (*d)(FILE *,void *),FILE *fp, int (*c)(void 
 		while(count > 0)
 		{
 			bstNode *newNode = dequeue(temp);
-                        fprintf(stdout," ");
+                        fprintf(fp," ");
 			if(newNode->left == NULL && newNode->right == NULL)
-				fprintf(stdout,"=");
+				fprintf(fp,"=");
 			d(fp,newNode->value);
 			fprintf(fp,"(");
 			d(fp,newNode->parent->value);

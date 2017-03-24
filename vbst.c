@@ -66,7 +66,12 @@ vbst *newVBST(void (*d)(FILE *,void *), int (*c)(void *,void *))
 int findVBST(vbst *vbstree, void *value)
 {
         vbstValue *temp = newVBSTValue(value,vbstree->display,vbstree->compare);
-        return findBST(vbstree->tree,(void*)temp);
+	bstNode *test = findBSTNode(vbstree->tree,(void*)temp);
+
+	if(test == NULL)
+		return 0;
+	else
+        	return ((vbstValue*)test->value)->freq;
 }
 
 bstNode *findVBSTNode(vbst *vbstree, void *value)

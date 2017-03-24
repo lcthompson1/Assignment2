@@ -97,7 +97,11 @@ void statisticsRBT(rbt *rbtree, FILE *fp)
 int findRBT(rbt *rbtree, void *value)
 {
 	rbtValue *temp = newRBTValue(value,rbtree->display,rbtree->compare);
-	return findBST(rbtree->tree,(void*)temp);
+	bstNode *test = findBSTNode(rbtree->tree,(void*)temp);
+	if(test == NULL)
+		return 0;
+	else
+		return ((rbtValue*)test->value)->freq;
 }
 
 bstNode *findRBTNode(rbt *rbtree, void *value)
@@ -127,8 +131,13 @@ bstNode *grandparent(bstNode *node)
 
 int color(bstNode *node)
 {
-	rbtValue *temp = node->value;
-	return temp->color;
+	if(node == NULL)
+		return 0;
+	else
+	{
+		rbtValue *temp = node->value;
+		return temp->color;
+	}
 }
 
 void changeColor(bstNode *node,int color)
@@ -138,47 +147,112 @@ void changeColor(bstNode *node,int color)
 
 void leftRotate(bst *tree, bstNode *node)
 {
+	if(node->right == NULL)
+		return;
+
         bstNode *y = node->right;
         node->right = y->left;
-        if(y->left != NULL)
-                y->left->parent = node;
 
-        y->parent = node->parent;
-        if(node->parent == node)
-                tree->root = y;
-        else
-        {
-                if(node == (node->parent->left))
-                        node->parent->left = y;
-                else
-                        node->parent->right = y;
-        }
-        y->left = node;
-        node->parent = y;
+	if(node->parent == NULL)
+		tree->root = y;
+	else if(node->parent->left == node)
+		node->parent->left = y;
+	else
+		node->parent->right = y;
+
+	y->left = node;
 }
 
 void rightRotate(bst *tree, bstNode *node)
 {
+        if(node->left == NULL)
+                return;
+
         bstNode *y = node->left;
         node->left = y->right;
-        if(y->right != NULL)
-                y->right->parent = node;
 
-        y->parent = node->parent;
-        if(node->parent == node)
+        if(node->parent == NULL)
                 tree->root = y;
+        else if(node->parent->right == node)
+                node->parent->right = y;
         else
-        {
-                if(node == (node->parent->right))
-                        node->parent->right = y;
-                else
-                        node->parent->left = y;
-        }
+                node->parent->left = y;
+
         y->right = node;
-        node->parent = y;
+}
+
+int isLinear(bstNode *node)
+{
+	if(node->parent == node->parent->parent->left)
+	{
+		if(node == node->parent->right)
+			return 0;
+	}
+	if(node->parent == node->parent->parent->right)
+	{
+		if(node == node->parent->left)
+			return 0;
+	}
+	return 1;
+}
+
+int isLeft(bstNode *node)
+{
+	if(node == node->parent->left)
+		return 1;
+	else
+		return 0;
+}
+
+void insertionFixup(bst *tree, bstNode *node)
+{
+	while(1)
+	{
+		if(node == tree->root)
+			break;
+		if(color(node->parent) == 0)
+			break;
+		fprintf(stdout,"\nUncle address: %d\n",uncle(node));
+		if(color(uncle(node)) == 1)
+		{
+			changeColor(node->parent,0);
+			changeColor(uncle(node),0);
+			changeColor(node->parent->parent,1);
+			node = node->parent->parent;
+		}
+		else
+		{
+			if(!isLinear(node))
+			{
+				if(isLeft(node))
+				{
+					rightRotate(tree,node);
+				}
+				else if(!isLeft(node))
+				{
+					leftRotate(tree,node);
+				}
+			}
+
+			changeColor(node->parent,0);
+			changeColor(node->parent->parent,1);
+			if(isLeft(node->parent))
+			{
+				rightRotate(tree,node->parent);
+			}
+			else if(!isLeft(node->parent))
+			{
+				leftRotate(tree,node->parent);
+			}
+		}
+
+	}
+
+	changeColor(tree->root,0);
 }
 
 
+/*
 void insertionFixup(bst *tree,bstNode *node)
 {
         while((node != tree->root) && ((color(node->parent)) == 1))
@@ -186,7 +260,6 @@ void insertionFixup(bst *tree,bstNode *node)
 		if(node->parent == node->parent->parent->left)
 		{
 			bstNode *y = node->parent->parent->right;
-			fprintf(stdout,"\nUncle address: %d Uncle color: %d\n",node,((rbtValue*)y->value)->color);
 			if(color(y) == 1)
 			{
 				changeColor(node->parent,0);
@@ -236,6 +309,7 @@ void insertionFixup(bst *tree,bstNode *node)
         }
 	changeColor(tree->root,0);
 }
+*/
 
 void insertRBT(rbt *rbtree, void *value)
 {
