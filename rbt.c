@@ -212,7 +212,6 @@ void insertionFixup(bst *tree, bstNode *node)
 			break;
 		if(color(node->parent) == 0)
 			break;
-		fprintf(stdout,"\nUncle address: %d\n",uncle(node));
 		if(color(uncle(node)) == 1)
 		{
 			changeColor(node->parent,0);
