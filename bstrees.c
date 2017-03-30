@@ -127,7 +127,7 @@ void readFileVanilla(FILE *fpin, FILE *fpout,FILE *commands)
 void readFileRB(FILE *fpin, FILE *fpout,FILE *commands)
 {
 	rbt *rbtree = newRBT(printString,stringComparator);
-        while(1)
+        while(!feof(fpin))
         {
                 char *s = "";
                 if(stringPending(fpin))
@@ -135,8 +135,12 @@ void readFileRB(FILE *fpin, FILE *fpout,FILE *commands)
                 else
                         s = readToken(fpin);
 
-                        clean(s);
-                if(strcmp(s,"") == 0)
+		if(feof(fpin))
+			break;
+
+                clean(s);
+
+		if(strcmp(s,"") == 0)
                         ;
                 else
                 {
