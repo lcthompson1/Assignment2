@@ -31,7 +31,7 @@ void clean(char *str)
 void readFileVanilla(FILE *fpin, FILE *fpout,FILE *commands)
 {
 	vbst *vbstree = newVBST(printString,stringComparator);
-	while(!feof(fpin))
+	while(1)
 	{
 		char *s = "";
 		if(stringPending(fpin))
@@ -49,16 +49,15 @@ void readFileVanilla(FILE *fpin, FILE *fpout,FILE *commands)
 		{
 			insertVBST(vbstree,(void*)s);
 		}
-		if(feof(fpin))
-			break;
 	}
 
-	while(!feof(commands))
+	while(1)
 	{
 		char *s = "";
 		s = readToken(commands);
 		if(feof(commands))
 			break;
+		fprintf(stdout,"Running command...\n");
 		if(strcmp(s,"s") == 0)
 		{
 			displayVBST(fpout,vbstree);
@@ -76,11 +75,14 @@ void readFileVanilla(FILE *fpin, FILE *fpout,FILE *commands)
 				c = readToken(commands);
 
 			clean(c);
+	
 
  			if(strcmp(c,"") == 0)
                         	;
                 	else
                 	{
+                        fprintf(stdout,"Inserting value ");
+                        fprintf(stdout,"%s",c);
                         	insertVBST(vbstree,(void*)c);
                 	}
 		}
@@ -98,6 +100,8 @@ void readFileVanilla(FILE *fpin, FILE *fpout,FILE *commands)
                                 ;
                         else
                         {
+                        fprintf(stdout,"Deleting value ");
+                        fprintf(stdout,"%s",c);
                                 deleteVBST(vbstree,(void*)c);
                         }
 		}
@@ -119,15 +123,13 @@ void readFileVanilla(FILE *fpin, FILE *fpout,FILE *commands)
 				fprintf(fpout,"Frequency of \"%s\": %d\n",c,freq);
                         }
 		}
-		if(feof(commands))
-			break;
 	}
 }
 
 void readFileRB(FILE *fpin, FILE *fpout,FILE *commands)
 {
 	rbt *rbtree = newRBT(printString,stringComparator);
-        while(!feof(fpin))
+        while(1)
         {
                 char *s = "";
                 if(stringPending(fpin))
@@ -147,11 +149,9 @@ void readFileRB(FILE *fpin, FILE *fpout,FILE *commands)
                         insertRBT(rbtree,(void*)s);
                 }
 
-                if(feof(fpin))
-                        break;
         }
 
-        while(!feof(commands))
+        while(1)
         {
                 char *s = "";
                 s = readToken(commands);
@@ -217,8 +217,6 @@ void readFileRB(FILE *fpin, FILE *fpout,FILE *commands)
                                 fprintf(fpout,"Frequency of \"%s\": %d\n",c,freq);
                         }
                 }
-                if(feof(commands))
-                        break;
         }
 
 }

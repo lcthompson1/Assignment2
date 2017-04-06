@@ -1,0 +1,20 @@
+0: "my"-B("my"-B)-
+1: "friend"-B("my"-B)-l "verybest"-R("my"-B)-r
+2: ="me"-R("friend"-B)-r "pass"-R("verybest"-R)-l
+3: "thaticould"-B("pass"-R)-r
+4: ="test"-R("thaticould"-B)-l "told"-B("thaticould"-B)-r
+5: ="this"-R("told"-B)-l
+0: "my"-B("my"-B)-
+1: "friend"-B("my"-B)-l "verybest"-R("my"-B)-r
+2: ="me"-R("friend"-B)-r "never"-R("pass"-B)-l
+3: "pass"-B("verybest"-R)-l
+4: "thaticould"-B("pass"-B)-r
+5: ="test"-R("thaticould"-B)-l "told"-B("thaticould"-B)-r
+6: ="this"-R("told"-B)-l
+0: "my"-B("my"-B)-
+1: "friend"-B("my"-B)-l "verybest"-R("my"-B)-r
+2: ="me"-R("friend"-B)-r "never"-R("pass"-B)-l
+3: "pass"-B("verybest"-R)-l
+4: "thaticould"-B("pass"-B)-r
+5: ="test"-R("thaticould"-B)-l "told"-B("thaticould"-B)-r
+6: ="this"-R("told"-B)-l

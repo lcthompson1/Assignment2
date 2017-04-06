@@ -147,13 +147,14 @@ void changeColor(bstNode *node,int color)
 
 void leftRotate(bst *tree, bstNode *node)
 {
+	fprintf(stdout,"Left rotating\n");
 	if(node->right == NULL)
 		return;
 
         bstNode *y = node->right;
         node->right = y->left;
 
-	if(node->parent == NULL)
+	if(node->parent == node)
 		tree->root = y;
 	else if(node->parent->left == node)
 		node->parent->left = y;
@@ -165,13 +166,14 @@ void leftRotate(bst *tree, bstNode *node)
 
 void rightRotate(bst *tree, bstNode *node)
 {
+	fprintf(stdout,"Right rotating\n");
         if(node->left == NULL)
                 return;
 
         bstNode *y = node->left;
         node->left = y->right;
 
-        if(node->parent == NULL)
+        if(node->parent == node)
                 tree->root = y;
         else if(node->parent->right == node)
                 node->parent->right = y;

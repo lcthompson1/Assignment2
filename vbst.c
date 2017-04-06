@@ -77,6 +77,7 @@ int findVBST(vbst *vbstree, void *value)
 bstNode *findVBSTNode(vbst *vbstree, void *value)
 {
         vbstValue *temp = newVBSTValue(value,vbstree->display,vbstree->compare);
+	fprintf(stdout,"Found value: %d\n",(int)temp);
         return findBSTNode(vbstree->tree,(void*)temp);
 }
 
@@ -125,6 +126,9 @@ void insertVBST(vbst *vbstree,void *value)
 
 void deleteVBST(vbst *vbstree,void *value)
 {
+	if(findVBST(vbstree,value) == 0)
+		return;
+
 	bstNode *temp = findVBSTNode(vbstree,value);
         if(temp == NULL)
         {

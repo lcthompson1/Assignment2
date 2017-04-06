@@ -167,6 +167,12 @@ void pruneBSTNode(bst *tree,bstNode *node)
 {
 	if(node->left == NULL && node->right == NULL)
 	{
+		if(node == tree->root)
+		{
+			tree->root = NULL;
+			return;
+		}
+
 		int comp = tree->compare(node->value,node->parent->value);
 		if(node->parent->right == NULL && node->parent->left != NULL)
 		{
@@ -183,7 +189,7 @@ void pruneBSTNode(bst *tree,bstNode *node)
 			node->parent->right = NULL;
 			node->parent = NULL;
 		}
-		else if(comp <= 0)
+		else if(comp < 0)
 		{
 			node->parent->left = NULL;
 			node->parent = NULL;
@@ -235,7 +241,7 @@ int maxBST(bstNode *node)
 
 void statisticsBST(bst *tree,FILE *fp)
 {
-	fprintf(fp,"Minimum Depth: %d\nMaximum Depth: %d\n",minBST(tree->root),maxBST(tree->root));
+	fprintf(fp,"Minimum depth: %d\nMaximum depth: %d\n",minBST(tree->root),maxBST(tree->root));
 }
 
 void levelOrder(bstNode *node, void (*d)(FILE *,void *),FILE *fp, int (*c)(void *,void *))
